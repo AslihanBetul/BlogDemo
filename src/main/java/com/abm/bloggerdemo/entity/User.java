@@ -28,7 +28,7 @@ public class User {
     @Email(message = "Can only use gmail")
     private String email;
     @Column(length = 8, nullable = false)
-    @Size(min = 8, max = 8, message = "Password must be 8 characters long")
+    @Size(min = 1, max = 8, message = "Password must be 8 characters long")
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Post> posts;

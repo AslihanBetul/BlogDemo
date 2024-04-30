@@ -35,18 +35,33 @@ public class UserController {
             return ResponseEntity.ok("Kayit Basarili");    }
     }
 
+
+
+
     @GetMapping(FINDALL)
     @CrossOrigin("*")
     public ResponseEntity<List<UserFindAllResponseDto>> findAllDto(){
-        return ResponseEntity.ok(userService.findUserDto());
+        ResponseEntity<List<UserFindAllResponseDto>> listResponseEntity = ResponseEntity.ok(userService.findUserDto());
+        if (listResponseEntity == null) {
+            throw new BloggerDemoAppException(ErrorType.USER_NOT_FOUND, "User not found");
+
+        }
+           return listResponseEntity;
+
     }
+
+
+
 
     @GetMapping(FINDBYNAMEANDLASTNAME)
     @CrossOrigin("*")
-    public ResponseEntity<UserFindAllResponseDto> findByNameAndLastNameDto(@RequestParam String name, @RequestParam String lastname){
-        return ResponseEntity.ok(userService.findUserDto2(name,lastname));
+    public ResponseEntity<UserFindAllResponseDto> findUserByNameAndLastName(@RequestParam String name, @RequestParam String lastname){
+        ResponseEntity<UserFindAllResponseDto> dtoResponseEntity = ResponseEntity.ok(userService.findUserDto2(name, lastname));
+        if (dtoResponseEntity.getBody()==null) {
+            throw new BloggerDemoAppException(ErrorType.USER_NOT_FOUND, "User not found");
+        }
+        return dtoResponseEntity;
     }
-
 
     @GetMapping(FINDBYID)
     @CrossOrigin("*")
@@ -55,6 +70,17 @@ public class UserController {
         return ResponseEntity.ok(userService.findUserDtoID(id));
     }
 
+    @PutMapping(UPDATE)
+    @CrossOrigin("*")
+   public ResponseEntity<String>updateUser(Long id,String name,String lastName,String email,String password){
+        return ResponseEntity.ok(userService.updateUser(id,name,lastName,email,password));
+   }
+
+    @DeleteMapping(DELETE)
+    @CrossOrigin("*")
+    public ResponseEntity<String>deleteUser(Long id){
+        return ResponseEntity.ok(userService.deleteUser(id));
+    }
 
 
 
