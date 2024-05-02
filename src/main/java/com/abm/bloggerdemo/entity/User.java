@@ -27,10 +27,17 @@ public class User {
     private String lastname;
     @Email(message = "Can only use gmail")
     private String email;
-    @Column(length = 8, nullable = false)
-    @Size(min = 1, max = 8, message = "Password must be 8 characters long")
+    @Column(length = 10, nullable = false)
+    @Size(min = 1, max = 10, message = "Password must be 8 characters long")
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Post> posts;
+
+    @ManyToMany
+    List<Post> likes;
+
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
 }

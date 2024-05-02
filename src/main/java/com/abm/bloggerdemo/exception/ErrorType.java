@@ -11,7 +11,8 @@ public enum ErrorType {
     POST_NOT_FOUND(5002,"Post not found!",HttpStatus.NOT_FOUND),
     CATEGORY_NOT_FOUND(5003,"Category not found!",HttpStatus.NOT_FOUND),
     WRONG_EMAIL_TYPE(5004,"Wrong email type!", HttpStatus.UNAUTHORIZED),
-    WRONG_PASSWORD_LENGHT(5005,"Wrong password lenght!", HttpStatus.LENGTH_REQUIRED);
+    WRONG_PASSWORD_LENGHT(5005,"Wrong password lenght!", HttpStatus.LENGTH_REQUIRED),
+    USER_OR_POST_NOT_FOUND(5006,"User or Post not found", HttpStatus.NOT_FOUND);
 
     private Integer code;
     private String message;

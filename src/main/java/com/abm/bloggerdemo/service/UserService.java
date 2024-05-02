@@ -2,10 +2,13 @@ package com.abm.bloggerdemo.service;
 
 import com.abm.bloggerdemo.dto.request.UserSaveRequestDto;
 import com.abm.bloggerdemo.dto.response.UserFindAllResponseDto;
+import com.abm.bloggerdemo.entity.Post;
 import com.abm.bloggerdemo.entity.User;
 import com.abm.bloggerdemo.exception.BloggerDemoAppException;
 import com.abm.bloggerdemo.exception.ErrorType;
 import com.abm.bloggerdemo.mapper.UserMapper;
+import com.abm.bloggerdemo.repository.CategoriesRepository;
+import com.abm.bloggerdemo.repository.PostRepository;
 import com.abm.bloggerdemo.repository.UserRepository;
 import com.abm.bloggerdemo.utility.ServiceManager;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,9 +22,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Service
 public class UserService extends ServiceManager<User,Long> {
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository) {
+    private final PostRepository postRepository;
+
+
+    public UserService(UserRepository userRepository, PostRepository postRepository) {
         super(userRepository);
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
+
     }
 
     public void userSaveDto(UserSaveRequestDto dto) {
@@ -56,6 +64,7 @@ public class UserService extends ServiceManager<User,Long> {
 
      }
 
+     //user güncelleme:
     public String updateUser(Long id,String name,String lastName,String email,String password){
         Optional<User> byId = userRepository.findById(id);
         if(byId.isEmpty()){
@@ -70,6 +79,7 @@ public class UserService extends ServiceManager<User,Long> {
         return "Güncelleme Basarili";
     }
 
+    //user silme:
     public String deleteUser(Long id){
         Optional<User> byId = userRepository.findById(id);
         if(byId.isEmpty()){
@@ -79,6 +89,42 @@ public class UserService extends ServiceManager<User,Long> {
         userRepository.delete(user);
         return "Kullanıcı silme işlemi  basarili";
     }
+
+    //post like etme:
+    public void userLikePost(Long userId, Long postId) {
+        Optional<User> user1 = userRepository.findById(userId);
+        Optional<Post> post1 = postRepository.findById(postId);
+
+        if (user1.isPresent() && post1.isPresent()) {
+            User user = user1.get();
+            Post post = post1.get();
+
+
+            if (!user.getLikes().contains(post)) {
+                user.getLikes().add(post);
+                userRepository.save(user);
+            }
+
+
+            if (!post.getUsers().contains(user)) {
+                post.getUsers().add(user);
+                postRepository.save(post);
+            }
+        } else {
+            throw new BloggerDemoAppException(ErrorType.USER_OR_POST_NOT_FOUND, "User or Post not found");
+        }
+
+
+    }
+
+
+    //post unlike etme:
+    public void userUnlikePost(Long userId, Long postId) {
+        userRepository.userUnlikePost(userId, postId);
+    }
+
+
+
 
 
 }

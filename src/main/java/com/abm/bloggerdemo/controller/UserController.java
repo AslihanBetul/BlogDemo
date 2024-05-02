@@ -81,6 +81,21 @@ public class UserController {
     public ResponseEntity<String>deleteUser(Long id){
         return ResponseEntity.ok(userService.deleteUser(id));
     }
+//post like etme
+    @PostMapping("/saveLike")
+    @CrossOrigin("*")
+    public ResponseEntity<String> userLikePost(@RequestParam Long userId, @RequestParam Long postId) {
+        userService.userLikePost(userId, postId);
+        return ResponseEntity.ok("Post liked");
+    }
+
+    //post unlike etme :
+    @DeleteMapping("/saveUnlike")
+    @CrossOrigin("*")
+    public ResponseEntity<String> userUnlikePost(@RequestParam Long userId, @RequestParam Long postId) {
+        userService.userUnlikePost(userId, postId);
+        return ResponseEntity.ok("Post unliked");
+    }
 
 
 
