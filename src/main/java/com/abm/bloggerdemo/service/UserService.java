@@ -52,22 +52,23 @@ public class UserService extends ServiceManager<User,Long> {
 
         return userFindAllResponseDto;
     }
-     //belirli bir kullanıcının id'sine göre detaylarını getiren metod:
-     public UserFindAllResponseDto findUserDtoID(Long id) {
-         Optional<User> byId = userRepository.findById(id);
-         if(byId.isEmpty()){
-             throw new BloggerDemoAppException(ErrorType.USER_NOT_FOUND, "User not found");
-         }
-             UserFindAllResponseDto userFindAllResponseDto = UserMapper.INSTANCE.userToUserFindAllResponseDto(byId.get());
-             return userFindAllResponseDto;
 
-
-     }
-
-     //user güncelleme:
-    public String updateUser(Long id,String name,String lastName,String email,String password){
+    //belirli bir kullanıcının id'sine göre detaylarını getiren metod:
+    public UserFindAllResponseDto findUserDtoID(Long id) {
         Optional<User> byId = userRepository.findById(id);
-        if(byId.isEmpty()){
+        if (byId.isEmpty()) {
+            throw new BloggerDemoAppException(ErrorType.USER_NOT_FOUND, "User not found");
+        }
+        UserFindAllResponseDto userFindAllResponseDto = UserMapper.INSTANCE.userToUserFindAllResponseDto(byId.get());
+        return userFindAllResponseDto;
+
+
+    }
+
+    //user güncelleme:
+    public String updateUser(Long id, String name, String lastName, String email, String password) {
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isEmpty()) {
             throw new BloggerDemoAppException(ErrorType.USER_NOT_FOUND, "User not found");
         }
         User user = byId.get();
@@ -80,9 +81,9 @@ public class UserService extends ServiceManager<User,Long> {
     }
 
     //user silme:
-    public String deleteUser(Long id){
+    public String deleteUser(Long id) {
         Optional<User> byId = userRepository.findById(id);
-        if(byId.isEmpty()){
+        if (byId.isEmpty()) {
             throw new BloggerDemoAppException(ErrorType.USER_NOT_FOUND, "User not found");
         }
         User user = byId.get();
@@ -119,12 +120,37 @@ public class UserService extends ServiceManager<User,Long> {
 
 
     //post unlike etme:
-    public void userUnlikePost(Long userId, Long postId) {
-        userRepository.userUnlikePost(userId, postId);
+    public String userLikePostDelete(Long userId, Long postId) {
+
+        Optional<User> user1 = userRepository.findById(userId);
+        Optional<Post> post1 = postRepository.findById(postId);
+
+
+        if (user1.isPresent() && post1.isPresent()) {
+            User user = user1.get();
+            Post post = post1.get();
+
+
+            post.getUsers().remove(user);
+            postRepository.save(post);
+
+
+            user.getLikes().remove(post);
+            userRepository.save(user);
+
+            return "Silme Başarılı";
+
+        } else {
+            throw new BloggerDemoAppException(ErrorType.USER_OR_POST_NOT_FOUND, "User or Post not found");
+        }
+
     }
 
 
-
-
-
 }
+
+
+
+
+
+

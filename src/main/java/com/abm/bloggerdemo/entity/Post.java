@@ -34,7 +34,6 @@ public class Post {
     @JoinColumn(name = "categories_id")
     Categories categories;
 
-
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 

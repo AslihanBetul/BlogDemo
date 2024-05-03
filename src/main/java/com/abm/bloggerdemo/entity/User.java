@@ -36,7 +36,6 @@ public class User {
     @ManyToMany
     List<Post> likes;
 
-
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Comment> comments;
 

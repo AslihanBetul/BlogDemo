@@ -19,11 +19,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findById(Long id);
 
 
-    //beğenilen posttan beğeniyi geri çekme:
 
 
-  @Query(value = "DELETE FROM tbl_user_likes WHERE users_id = :x AND likes_id = :y", nativeQuery = true)
-  void userUnlikePost(@Param("x") Long userId, @Param("y") Long postId);
+
+
 
 
 }

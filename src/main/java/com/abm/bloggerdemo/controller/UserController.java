@@ -93,7 +93,7 @@ public class UserController {
     @DeleteMapping("/saveUnlike")
     @CrossOrigin("*")
     public ResponseEntity<String> userUnlikePost(@RequestParam Long userId, @RequestParam Long postId) {
-        userService.userUnlikePost(userId, postId);
+        userService.userLikePostDelete(userId, postId);
         return ResponseEntity.ok("Post unliked");
     }
 
